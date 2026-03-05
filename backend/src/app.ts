@@ -1,6 +1,7 @@
 import express, { Express } from 'express';
 import cors from 'cors';
 import { errorMiddleware } from './middlewares/error.middleware';
+import { authRouter } from './modules/auth/auth.routes';
 import { categoryRouter } from './modules/categories/category.routes';
 import { supplierRouter } from './modules/suppliers/supplier.routes';
 import { userRouter } from './modules/users/user.routes';
@@ -16,6 +17,7 @@ app.get('/health', (_, res) => {
   res.json({ status: 'ok' });
 });
 
+app.use('/auth', authRouter);
 app.use('/users', userRouter);
 app.use('/categories', categoryRouter);
 app.use('/suppliers', supplierRouter);

@@ -3,7 +3,9 @@ import { prisma } from '../../config/database';
 import { AppError } from '../../shared/errors/AppError';
 import { Decimal } from '@prisma/client/runtime/library';
 
-const mockTransaction = vi.fn();
+const { mockTransaction } = vi.hoisted(() => ({
+  mockTransaction: vi.fn(),
+}));
 
 vi.mock('../../config/database', () => ({
   prisma: {
@@ -100,9 +102,9 @@ describe('saleService', () => {
     it('should throw AppError 404 when user not found', async () => {
       vi.mocked(prisma.user.findFirst).mockResolvedValue(null);
 
-      await expect(saleService.create({ userId: 'invalid', items: [{ productId: 'prod1', quantity: 1 }] })).rejects.toThrow(
-        new AppError('Usuário não encontrado', 404),
-      );
+      await expect(
+        saleService.create({ userId: 'invalid', items: [{ productId: 'prod1', quantity: 1 }] }),
+      ).rejects.toThrow(new AppError('Usuário não encontrado', 404));
     });
 
     it('should throw AppError 404 when product not found', async () => {
@@ -126,10 +128,12 @@ describe('saleService', () => {
     it('should create sale and decrement stock in a transaction', async () => {
       vi.mocked(prisma.user.findFirst).mockResolvedValue({ id: 'user1' } as any);
       vi.mocked(prisma.product.findFirst).mockResolvedValue(mockProduct as any);
-      mockTransaction.mockImplementation(async (fn: Function) => fn({
-        sale: { create: vi.fn().mockResolvedValue(mockSale) },
-        product: { update: vi.fn().mockResolvedValue({}) },
-      }));
+      mockTransaction.mockImplementation(async (fn: Function) =>
+        fn({
+          sale: { create: vi.fn().mockResolvedValue(mockSale) },
+          product: { update: vi.fn().mockResolvedValue({}) },
+        }),
+      );
 
       const result = await saleService.create({ userId: 'user1', items: [{ productId: 'prod1', quantity: 2 }] });
 
@@ -141,10 +145,12 @@ describe('saleService', () => {
   describe('cancel', () => {
     it('should cancel sale and restore stock', async () => {
       vi.mocked(prisma.sale.findUnique).mockResolvedValue(mockSale as any);
-      mockTransaction.mockImplementation(async (fn: Function) => fn({
-        sale: { update: vi.fn().mockResolvedValue({ ...mockSale, status: 'CANCELLED' }) },
-        product: { update: vi.fn().mockResolvedValue({}) },
-      }));
+      mockTransaction.mockImplementation(async (fn: Function) =>
+        fn({
+          sale: { update: vi.fn().mockResolvedValue({ ...mockSale, status: 'CANCELLED' }) },
+          product: { update: vi.fn().mockResolvedValue({}) },
+        }),
+      );
 
       const result = await saleService.cancel('sale1');
 

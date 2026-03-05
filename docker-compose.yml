@@ -10,6 +10,7 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=development
+      - JWT_SECRET=dev_secret_change_in_production
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/mini_market_dev
     depends_on:
       db:
