@@ -2,6 +2,7 @@ import express, { Express } from 'express';
 import cors from 'cors';
 import { errorMiddleware } from './middlewares/error.middleware';
 import { categoryRouter } from './modules/categories/category.routes';
+import { supplierRouter } from './modules/suppliers/supplier.routes';
 
 export const app: Express = express();
 
@@ -13,5 +14,6 @@ app.get('/health', (_, res) => {
 });
 
 app.use('/categories', categoryRouter);
+app.use('/suppliers', supplierRouter);
 
 app.use(errorMiddleware);
