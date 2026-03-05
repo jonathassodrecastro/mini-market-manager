@@ -8,7 +8,7 @@ Sistema de gestão para minimercados — projeto de estudo fullstack com Node.js
 
 ## Visão geral
 
-O Mini Market Manager nasceu da necessidade de aprender na prática. A ideia é construir um sistema real de gestão de minimercados cobrindo as principais responsabilidades de um produto fullstack: autenticação, cadastros, relatórios, integração com IA e deploy em produção.
+O Mini Market Manager (M3) nasceu da necessidade de aprender na prática. A ideia é construir um sistema real de gestão de minimercados cobrindo as principais responsabilidades de um produto fullstack: autenticação, cadastros, relatórios, integração com IA e deploy em produção.
 
 ---
 
@@ -25,15 +25,15 @@ O Mini Market Manager nasceu da necessidade de aprender na prática. A ideia é 
 
 ## Stack
 
-| Camada | Tecnologia |
-|---|---|
-| Backend | Node.js + Express + TypeScript |
-| Frontend | Next.js + TypeScript |
-| Banco de dados | PostgreSQL + Prisma ORM |
-| IA | Claude API (Anthropic) |
-| Infra | Docker + Docker Compose |
-| CI/CD | GitHub Actions |
-| Pacotes | pnpm workspaces (monorepo) |
+| Camada         | Tecnologia                     |
+| -------------- | ------------------------------ |
+| Backend        | Node.js + Express + TypeScript |
+| Frontend       | Next.js + TypeScript           |
+| Banco de dados | PostgreSQL + Prisma ORM        |
+| IA             | Claude API (Anthropic)         |
+| Infra          | Docker + Docker Compose        |
+| CI/CD          | GitHub Actions                 |
+| Pacotes        | pnpm workspaces (monorepo)     |
 
 ---
 
