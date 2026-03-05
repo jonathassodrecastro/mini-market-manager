@@ -72,12 +72,37 @@ A expandir futuramente: testes, push para registry, deploy automático.
 - ORM: **Prisma**
 - Banco: **PostgreSQL 16**
 - Conexão via variável `DATABASE_URL`
+- Schema em `backend/prisma/schema.prisma`
 - Comandos úteis:
   ```bash
   pnpm db:migrate    # aplica migrations
   pnpm db:generate   # gera o Prisma Client
   pnpm db:studio     # abre o Prisma Studio (GUI)
   ```
+
+### Modelagem
+
+| Entidade | Delete | Motivo |
+|---|---|---|
+| `User` | Soft | Histórico de ações |
+| `Category` | Hard | Dado simples, sem impacto histórico |
+| `Supplier` | Soft | Pode ser reativado |
+| `Product` | Soft | Vendas antigas referenciam o produto |
+| `Sale` / `SaleItem` | Nunca | Dado financeiro — apenas cancelamento via status |
+
+**Relações:**
+- `User` → `Sale` (1:N)
+- `Category` → `Product` (1:N)
+- `Supplier` → `Product` (1:N, opcional)
+- `Sale` → `SaleItem` (1:N)
+- `Product` → `SaleItem` (1:N)
+
+**Decisões técnicas:**
+- Valores monetários usam `Decimal` (não `Float`) para evitar erros de arredondamento
+- `SaleItem` armazena `unitPrice` no momento da venda — protege o histórico de alterações futuras no preço do produto
+- `SaleItem.subtotal` é persistido no banco (quantity × unitPrice) para facilitar relatórios sem recalcular
+- `Product.minStock` é a base para alertas de reposição
+- `Sale.status` usa enum `COMPLETED | CANCELLED`
 
 ---
 
@@ -97,3 +122,4 @@ Convenção de nomes: `tipo/descricao` (ex: `feat/`, `fix/`, `infra/`, `chore/`)
 - Monorepo com pnpm workspaces para compartilhar tipos e scripts entre backend e frontend no futuro
 - Alpine como base das imagens Docker para reduzir tamanho e superfície de ataque
 - Stage `builder` separado no Dockerfile para que código-fonte TypeScript não entre na imagem de produção
+- Estratégia de deleção mista: soft delete onde há impacto histórico, hard delete onde o dado é simples e isolado
