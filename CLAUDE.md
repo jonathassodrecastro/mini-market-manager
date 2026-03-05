@@ -123,3 +123,24 @@ Convenção de nomes: `tipo/descricao` (ex: `feat/`, `fix/`, `infra/`, `chore/`)
 - Alpine como base das imagens Docker para reduzir tamanho e superfície de ataque
 - Stage `builder` separado no Dockerfile para que código-fonte TypeScript não entre na imagem de produção
 - Estratégia de deleção mista: soft delete onde há impacto histórico, hard delete onde o dado é simples e isolado
+
+---
+
+## Testes
+
+**Regra:** nenhum código vai para a `main` sem testes.
+
+- Framework: **Vitest**
+- Cobertura: **@vitest/coverage-v8**
+- Localização: co-localizados com o código (`*.test.ts` ao lado do arquivo testado)
+
+**Tipos de teste:**
+- **Unitário** — lógica isolada de services e utils, sem dependências externas
+- **Integração** — rotas + banco de dados
+
+**Comandos:**
+```bash
+pnpm test              # roda todos os testes uma vez
+pnpm test:watch        # modo watch (desenvolvimento)
+pnpm test:coverage     # roda com relatório de cobertura
+```
