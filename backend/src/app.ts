@@ -1,8 +1,8 @@
-import express from 'express';
+import express, { Express } from 'express';
 import cors from 'cors';
 import { errorMiddleware } from './middlewares/error.middleware';
 
-export const app = express();
+export const app: Express = express();
 
 app.use(cors());
 app.use(express.json());
