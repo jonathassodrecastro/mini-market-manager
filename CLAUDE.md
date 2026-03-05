@@ -144,3 +144,50 @@ pnpm test              # roda todos os testes uma vez
 pnpm test:watch        # modo watch (desenvolvimento)
 pnpm test:coverage     # roda com relatório de cobertura
 ```
+
+---
+
+## Estrutura do backend
+
+```
+backend/src/
+├── index.ts                        # entrypoint — apenas inicializa o servidor
+├── app.ts                          # configuração do Express (middlewares, rotas, health check)
+├── config/
+│   └── database.ts                 # Prisma Client singleton
+├── modules/                        # organizado por domínio
+│   ├── users/
+│   ├── products/
+│   ├── categories/
+│   ├── suppliers/
+│   └── sales/
+├── middlewares/
+│   └── error.middleware.ts         # captura todos os erros lançados nas rotas
+└── shared/
+    └── errors/
+        └── AppError.ts             # classe de erro customizada com statusCode
+```
+
+### Convenção dos módulos
+
+Cada módulo terá:
+
+| Arquivo | Responsabilidade |
+|---|---|
+| `*.routes.ts` | Define as rotas e conecta ao controller |
+| `*.controller.ts` | Recebe a requisição, chama o service, retorna a resposta |
+| `*.service.ts` | Contém a lógica de negócio e acesso ao banco via Prisma |
+| `*.service.test.ts` | Testes unitários do service |
+
+### Separação `index.ts` × `app.ts`
+
+`index.ts` apenas chama `.listen()`. `app.ts` configura toda a aplicação.
+Isso permite importar o `app` nos testes de integração sem subir um servidor real.
+
+### AppError
+
+Erros esperados (validação, not found, unauthorized) devem ser lançados como `AppError`:
+```typescript
+throw new AppError('Produto não encontrado', 404);
+```
+O `error.middleware.ts` captura e responde com o status correto. Erros não tratados retornam 500.
