@@ -1,0 +1,71 @@
+@baseUrl = http://localhost:3001
+
+### Listar todos os produtos
+GET {{baseUrl}}/products
+
+### Buscar produto por ID (substitua o ID)
+GET {{baseUrl}}/products/7cfc078d-c8ea-49e9-9ad3-4ffb4f5dc302
+
+### Criar produto (substitua categoryId e supplierId por IDs reais)
+POST {{baseUrl}}/products
+Content-Type: application/json
+
+{
+  "name": "Arroz Branco 5kg",
+  "barcode": "7891234567890",
+  "price": 25.90,
+  "stock": 100,
+  "minStock": 20,
+  "categoryId": "CATEGORY_ID_AQUI",
+  "supplierId": "SUPPLIER_ID_AQUI"
+}
+
+### Criar produto sem fornecedor
+POST {{baseUrl}}/products
+Content-Type: application/json
+
+{
+  "name": "Feijão Preto 1kg",
+  "price": 8.50,
+  "stock": 50,
+  "minStock": 10,
+  "categoryId": "CATEGORY_ID_AQUI"
+}
+
+### Atualizar produto (substitua o ID)
+PUT {{baseUrl}}/products/7cfc078d-c8ea-49e9-9ad3-4ffb4f5dc302
+Content-Type: application/json
+
+{
+  "price": 27.90,
+  "stock": 150
+}
+
+### Deletar produto (soft delete) (substitua o ID)
+DELETE {{baseUrl}}/products/7cfc078d-c8ea-49e9-9ad3-4ffb4f5dc302
+
+### --- Casos de erro ---
+
+### Tentar criar com código de barras duplicado (deve retornar 409)
+POST {{baseUrl}}/products
+Content-Type: application/json
+
+{
+  "name": "Duplicado",
+  "barcode": "7891234567890",
+  "price": 10,
+  "categoryId": "CATEGORY_ID_AQUI"
+}
+
+### Tentar criar com categoria inexistente (deve retornar 404)
+POST {{baseUrl}}/products
+Content-Type: application/json
+
+{
+  "name": "Produto Teste",
+  "price": 10,
+  "categoryId": "id-que-nao-existe"
+}
+
+### Buscar produto inexistente (deve retornar 404)
+GET {{baseUrl}}/products/id-que-nao-existe

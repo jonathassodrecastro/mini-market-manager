@@ -1,0 +1,50 @@
+@baseUrl = http://localhost:3001
+
+### Listar todas as vendas
+GET {{baseUrl}}/sales
+
+### Buscar venda por ID (substitua o ID)
+GET {{baseUrl}}/sales/7cfc078d-c8ea-49e9-9ad3-4ffb4f5dc302
+
+### Criar venda (substitua userId e productId por IDs reais)
+POST {{baseUrl}}/sales
+Content-Type: application/json
+
+{
+  "userId": "USER_ID_AQUI",
+  "items": [
+    { "productId": "PRODUCT_ID_AQUI", "quantity": 2 },
+    { "productId": "OUTRO_PRODUCT_ID", "quantity": 1 }
+  ]
+}
+
+### Cancelar venda (substitua o ID)
+PATCH {{baseUrl}}/sales/7cfc078d-c8ea-49e9-9ad3-4ffb4f5dc302/cancel
+
+### --- Casos de erro ---
+
+### Tentar criar venda sem itens (deve retornar 400)
+POST {{baseUrl}}/sales
+Content-Type: application/json
+
+{
+  "userId": "USER_ID_AQUI",
+  "items": []
+}
+
+### Tentar criar venda com estoque insuficiente (deve retornar 409)
+POST {{baseUrl}}/sales
+Content-Type: application/json
+
+{
+  "userId": "USER_ID_AQUI",
+  "items": [
+    { "productId": "PRODUCT_ID_AQUI", "quantity": 99999 }
+  ]
+}
+
+### Tentar cancelar venda já cancelada (deve retornar 409)
+PATCH {{baseUrl}}/sales/7cfc078d-c8ea-49e9-9ad3-4ffb4f5dc302/cancel
+
+### Buscar venda inexistente (deve retornar 404)
+GET {{baseUrl}}/sales/id-que-nao-existe

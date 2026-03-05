@@ -1,0 +1,55 @@
+@baseUrl = http://localhost:3001
+
+### Listar todos os usuários
+GET {{baseUrl}}/users
+
+### Buscar usuário por ID (substitua o ID)
+GET {{baseUrl}}/users/7cfc078d-c8ea-49e9-9ad3-4ffb4f5dc302
+
+### Criar usuário
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "Alice Silva",
+  "email": "alice@example.com",
+  "password": "senha123",
+  "role": "ADMIN"
+}
+
+### Criar usuário (role padrão: OPERADOR)
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "Bob Souza",
+  "email": "bob@example.com",
+  "password": "senha456"
+}
+
+### Atualizar usuário (substitua o ID)
+PUT {{baseUrl}}/users/7cfc078d-c8ea-49e9-9ad3-4ffb4f5dc302
+Content-Type: application/json
+
+{
+  "name": "Alice Oliveira",
+  "role": "OPERADOR"
+}
+
+### Deletar usuário (soft delete) (substitua o ID)
+DELETE {{baseUrl}}/users/7cfc078d-c8ea-49e9-9ad3-4ffb4f5dc302
+
+### --- Casos de erro ---
+
+### Tentar criar com e-mail duplicado (deve retornar 409)
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "Duplicado",
+  "email": "alice@example.com",
+  "password": "qualquer"
+}
+
+### Buscar usuário inexistente (deve retornar 404)
+GET {{baseUrl}}/users/id-que-nao-existe
