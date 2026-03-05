@@ -17,9 +17,9 @@ FROM node:22-alpine AS production
 WORKDIR /app
 RUN npm install -g pnpm
 COPY package.json ./
-RUN pnpm install --prod --ignore-scripts
+COPY prisma ./prisma
+RUN pnpm install --prod
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 USER node
 EXPOSE 3001
 CMD ["node", "dist/index.js"]
