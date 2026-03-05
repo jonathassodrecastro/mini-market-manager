@@ -1,0 +1,39 @@
+@baseUrl = http://localhost:3001
+
+### Listar todas as categorias
+GET {{baseUrl}}/categories
+
+### Buscar categoria por ID (substitua o ID)
+GET {{baseUrl}}/categories/7cfc078d-c8ea-49e9-9ad3-4ffb4f5dc302
+
+### Criar categoria
+POST {{baseUrl}}/categories
+Content-Type: application/json
+
+{
+  "name": "Bebidas"
+}
+
+### Atualizar categoria (substitua o ID)
+PUT {{baseUrl}}/categories/7cfc078d-c8ea-49e9-9ad3-4ffb4f5dc302
+Content-Type: application/json
+
+{
+  "name": "Bebidas e Sucos"
+}
+
+### Deletar categoria (substitua o ID)
+DELETE {{baseUrl}}/categories/d1bb3d93-c0e9-45f5-9928-cbd12eb38d2b
+
+### --- Casos de erro ---
+
+### Tentar criar com nome duplicado (deve retornar 409)
+POST {{baseUrl}}/categories
+Content-Type: application/json
+
+{
+  "name": "Bebidas"
+}
+
+### Buscar categoria inexistente (deve retornar 404)
+GET {{baseUrl}}/categories/id-que-nao-existe
